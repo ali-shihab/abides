@@ -23,6 +23,10 @@ parser.add_argument('-t',
                     '--ticker',
                     required=True,
                     help='Name of the stock/symbol')
+parser.add_argument('-f',
+                    '--file_type',
+                    required=True,
+                    help='type of orders file (.json, .csv, etc.)')
 parser.add_argument('-d',
                     '--date',
                     required=True,
@@ -98,8 +102,9 @@ agent_types.extend("ExchangeAgent")
 agent_count += 1
 
 # 2) Market Replay Agent
-file_name = f'DOW30/{symbol}/{symbol}.{historical_date}'
-orders_file_path = f'/efs/data/{file_name}'
+file_type = args.file_type
+file_name = f'{symbol}/{symbol}-{historical_date}{file_type}'
+orders_file_path = f'/Users/alishihab/projects/trading/research/sims/abides/data/{file_name}'
 
 agents.extend([MarketReplayAgent(id=1,
                                  name="MARKET_REPLAY_AGENT",
@@ -110,7 +115,7 @@ agents.extend([MarketReplayAgent(id=1,
                                  start_time=mkt_open,
                                  end_time=mkt_close,
                                  orders_file_path=orders_file_path,
-                                 processed_orders_folder_path='/efs/data/marketreplay/',
+                                 processed_orders_folder_path='/Users/alishihab/projects/trading/research/sims/abides/data/marketreplay/',
                                  starting_cash=0,
                                  random_state=np.random.RandomState(seed=np.random.randint(low=0, high=2 ** 32,
                                                                                            dtype='uint64')))])

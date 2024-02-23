@@ -307,7 +307,7 @@ class ExchangeAgent(FinancialAgent):
         levels, freq, last_agent_update = values[0], values[1], values[2]
         orderbook_last_update = self.order_books[symbol].last_update_ts
         if (freq == 0) or \
-           ((orderbook_last_update > last_agent_update) and ((orderbook_last_update - last_agent_update).delta >= freq)):
+           ((orderbook_last_update > last_agent_update) and ((orderbook_last_update - last_agent_update).value >= freq)):
           self.sendMessage(agent_id, Message({"msg": "MARKET_DATA",
                                               "symbol": symbol,
                                               "bids": self.order_books[symbol].getInsideBids(levels),
