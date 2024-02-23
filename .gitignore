@@ -11,3 +11,5 @@ venv/
 .idea/
 .ipynb/
 .ipynb_checkpoints/
+*.json
+*.pkl
