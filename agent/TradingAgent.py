@@ -181,7 +181,6 @@ class TradingAgent(FinancialAgent):
 
   def receiveMessage (self, currentTime, msg):
     super().receiveMessage(currentTime, msg)
-
     # Do we know the market hours?
     had_mkt_hours = self.mkt_open is not None and self.mkt_close is not None
 
@@ -416,7 +415,6 @@ class TradingAgent(FinancialAgent):
 
       if order.quantity >= o.quantity: del self.orders[order.order_id]
       else: o.quantity -= order.quantity
-
     else:
       log_print ("Execution received for order not in orders list: {}", order)
 

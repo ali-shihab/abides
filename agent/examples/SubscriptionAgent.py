@@ -37,7 +37,7 @@ class SubscriptionAgent(TradingAgent):
         if self.subscribe and self.state == 'AWAITING_MARKET_DATA' and msg.body['msg'] == 'MARKET_DATA':
             bids, asks = msg.body['bids'], msg.body['asks']
             log_print("--------------------")
-            log_print("seconds elapsed since last update: {}", (currentTime - self.last_update_ts).delta / 1e9)
+            log_print("seconds elapsed since last update: {}", (currentTime - self.last_update_ts).nanoseconds / 1e9)
             log_print("number of bid levels: {}", len(bids))
             log_print("number of ask levels: {}", len(asks))
             log_print("bids: {}, asks: {}", bids, asks)

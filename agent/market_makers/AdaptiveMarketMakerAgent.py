@@ -165,7 +165,7 @@ class AdaptiveMarketMakerAgent(TradingAgent):
                     self.state['AWAITING_SPREAD'] = False  # use last mid price and spread
 
             if self.state['AWAITING_SPREAD'] is False and self.state['AWAITING_TRANSACTED_VOLUME'] is False:
-                self.placeOrders(mid)
+                self.placeOrders(self.last_mid)
                 self.state = self.initialiseState()
                 self.setWakeup(currentTime + self.getWakeFrequency())
 
@@ -186,7 +186,8 @@ class AdaptiveMarketMakerAgent(TradingAgent):
                     self.state['AWAITING_MARKET_DATA'] = False
 
             if self.state['MARKET_DATA'] is False and self.state['AWAITING_TRANSACTED_VOLUME'] is False:
-                self.placeOrders(mid)
+                bid, _, ask, _ = self.getKnownBidAsk(self.symbol)
+                # self.placeOrders((bid + ask)/2)
                 self.state = self.initialiseState()
 
     def _adaptive_update_spread(self, spread):
@@ -232,8 +233,9 @@ class AdaptiveMarketMakerAgent(TradingAgent):
 
         :return:
         """
-
-        if self.anchor == ANCHOR_MIDDLE_STR:
+        if mid is None:
+            pass
+        elif self.anchor == ANCHOR_MIDDLE_STR:
             highest_bid = int(mid) - floor(0.5 * self.window_size)
             lowest_ask = int(mid) + ceil(0.5 * self.window_size)
         elif self.anchor == ANCHOR_BOTTOM_STR:

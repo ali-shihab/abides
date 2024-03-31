@@ -74,7 +74,6 @@ class ExchangeAgent(FinancialAgent):
   # This can probably go away once we code the opening cross auction.
   def kernelInitializing (self, kernel):
     super().kernelInitializing(kernel)
-
     self.oracle = self.kernel.oracle
 
     # Obtain opening prices (in integer cents).  These are not noisy right now.

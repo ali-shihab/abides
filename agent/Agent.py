@@ -125,7 +125,6 @@ class Agent:
     # an object guaranteed to inherit from the message.Message class.
 
     self.currentTime = currentTime
-
     log_print ("At {}, agent {} ({}) received: {}",
                   self.kernel.fmtTime(currentTime), self.id, self.name, msg)
 

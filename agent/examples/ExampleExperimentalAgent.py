@@ -109,8 +109,8 @@ class ExampleExperimentalAgent(ExampleExperimentalAgentTemplate):
         :return:
         """
         super().receiveMessage(currentTime, msg)  # receives subscription market data
-        self.mid_price_history = self.mid_price_history.append(
-            pd.Series({'mid_price': self.getCurrentMidPrice()}, name=currentTime))
+        self.mid_price_history = pd.concat((self.mid_price_history,
+            pd.DataFrame({'mid_price': [self.getCurrentMidPrice()]}, index=[currentTime])))
         self.mid_price_history.dropna(inplace=True)
 
     def computeMidPriceMovingAverages(self):
@@ -130,12 +130,16 @@ class ExampleExperimentalAgent(ExampleExperimentalAgentTemplate):
             :param currentTime: pd.Timestamp for current simulation time
         """
         super().wakeup(currentTime)
+        order = (0, 0, 0)
         short_moving_avg, long_moving_avg = self.computeMidPriceMovingAverages()
         if short_moving_avg is not None and long_moving_avg is not None:
             if short_moving_avg > long_moving_avg:
                 self.placeMarketOrder(self.order_size, 0)
+                order = (self.mid_price_history.iloc[-1]['mid_price'], -self.order_size, 2)
             elif short_moving_avg < long_moving_avg:
                 self.placeMarketOrder(self.order_size, 1)
+                order = (self.mid_price_history.iloc[-1]['mid_price'], self.order_size, 2)
+        return order
 
     def getWakeFrequency(self):
         """ Set next wakeup time for agent. """
